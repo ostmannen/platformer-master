@@ -20,15 +20,24 @@ namespace platformer
                 Background background = new Background();
                 scene.spawn(background);
 
-                Key key = new Key();
-                scene.spawn(key);
-                
-                Door door = new Door();
-                scene.spawn(door);
-            
+
+                scene.spawn(new Key
+                {
+                    Position = new Vector2f(300, 200)
+                });
+
+                scene.spawn(new Door
+                {
+                    Position = new Vector2f(150, 265)
+                });
+
+                scene.spawn(new Hero
+                {
+                    Position = new Vector2f(100, 265)
+                });
 
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 28; i++)
                 {
                     scene.spawn(new Platform
                     {
@@ -40,11 +49,6 @@ namespace platformer
                     new Vector2f(200, 150),
                     new Vector2f(400, 300)));
 
-
-
-
-
-
                 while (Window.IsOpen)
                 {
                     Window.DispatchEvents();
@@ -53,11 +57,6 @@ namespace platformer
                     scene.UpdateAll(deltaTime);
                     scene.renderAll(Window);
                     Window.Display();
-
-
-
-
-
                 }
             }
         }
