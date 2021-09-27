@@ -10,7 +10,9 @@ namespace platformer
     {
         private readonly Dictionary<string, Texture> textures;
         private readonly List<Entity> entities;
-        
+        public string nextScene;
+        public string currentScene;
+
         //Fråga help sos
         //det ska vara readonly, men vi har gjort den static så att den slutar klaga just nu.
         public Scene()
@@ -37,6 +39,7 @@ namespace platformer
         }
         public void UpdateAll(float deltaTime)
         {
+            HandleSceneChange();
             for (int i = entities.Count - 1; i >= 0; i--)
             {
                 Entity entity = entities[i];
@@ -51,7 +54,6 @@ namespace platformer
                 }
                 else i++;
             }
-
         }
         public void renderAll(RenderTarget target)
         {
@@ -61,7 +63,8 @@ namespace platformer
             }
 
         }
-        public bool TryMove(Entity entity, Vector2f movement){
+        public bool TryMove(Entity entity, Vector2f movement)
+        {
             entity.Position += movement;
             bool collided = false;
             for (int i = 0; i < entities.Count; i++)
@@ -70,13 +73,28 @@ namespace platformer
                 if (!other.Solid) continue;
                 if (other == entity) continue;
                 FloatRect boundsA = entity.Bounds;
-                FloatRect boundsB = entity.Bounds;
-                if ()
-
+                FloatRect boundsB = other.Bounds;
+                if (Collision.RectangleRectangle(boundsA, boundsB,
+                out Collision.Hit hit))
+                {
+                    entity.Position += hit.Normal * hit.Overlap;
+                    i = -1;
+                    collided = true;
+                }
             }
-            
             return collided;
-            
+        }
+        public void Reload()
+        {
+            currentScene = nextScene;
+        }
+        public void Load(string next)
+        {
+
+        }
+        private void HandleSceneChange()
+        {
+
         }
     }
 }

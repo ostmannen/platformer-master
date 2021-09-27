@@ -33,7 +33,11 @@ namespace platformer
 
                 scene.spawn(new Hero
                 {
-                    Position = new Vector2f(100, 265)
+                    Position = new Vector2f(100, 268)
+                });
+
+                scene.spawn(new Platform{
+                    Position = new Vector2f(150, 265)
                 });
 
 

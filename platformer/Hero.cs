@@ -7,7 +7,12 @@ namespace platformer
 {
     public class Hero : Entity
     {
-
+        public const float WalkSpeed = 100.0f;
+        public const float JumpForce = 250.0f;
+        public const float GravityForce = 400.0f;
+        private float vertocalSpeed;
+        public bool isgrounded;
+        public bool isUpPressed;
         private bool faceRight = false;
         public Hero() : base("characters")
         {
@@ -18,13 +23,37 @@ namespace platformer
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.Left))
             {
-                Position -= new Vector2f(100 * deltaTime, 0);
+                scene.TryMove(this, new Vector2f(-WalkSpeed * deltaTime, 0));
                 faceRight = false;
             }
             else if (Keyboard.IsKeyPressed(Keyboard.Key.Right))
             {
-                Position += new Vector2f(100 * deltaTime, 0);
+                scene.TryMove(this, new Vector2f(WalkSpeed * deltaTime, 0));
                 faceRight = true;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Up))
+            {
+                if (isgrounded && !isUpPressed)
+                {
+                    vertocalSpeed = -JumpForce;
+                    isUpPressed = true;
+                }
+                else
+                {
+                    isUpPressed = false;
+                }
+            }
+            vertocalSpeed += GravityForce * deltaTime;
+            if (vertocalSpeed > 500.0f) vertocalSpeed = 500.0f;
+            isgrounded = false;
+            Vector2f velocity = new Vector2f(0, vertocalSpeed * deltaTime);
+            if (scene.TryMove(this, velocity))
+            {
+                if (vertocalSpeed > 0.0f)
+                {
+                    isgrounded = true;
+                }
+                vertocalSpeed = 0.0f;
             }
         }
         public override void render(RenderTarget target)
