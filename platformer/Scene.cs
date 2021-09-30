@@ -3,6 +3,8 @@ using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace platformer
 {
@@ -94,7 +96,30 @@ namespace platformer
         }
         private void HandleSceneChange()
         {
+            if (nextScene == null) return;
+            entities.Clear();
+            spawn(new Background());
 
+            string file = $"assets/{nextScene}.txt";
+            Console.WriteLine($"Loading scene '{file}'");
+
+            currentScene = nextScene;
+            nextScene = null;
+
+            foreach (var line in File.ReadLines(file, Encoding.UTF8))
+            {
+                string parsed = line.Trim();
+                int commentAt = parsed.IndexOf('#');
+                if (commentAt >= 0 && line.Length == 0)
+                {
+                    parsed = parsed.Substring(0, commentAt);
+                    parsed = parsed.Trim();
+                    string[] words = parsed.Split(" ");
+
+                }// punkt 48?? wtf
+                
+
+            }
         }
     }
 }
